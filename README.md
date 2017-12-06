@@ -1,2 +1,3 @@
 # Cake.Mix
-Set of utility Cake build scripts
+
+Set of utility Cake build scripts.

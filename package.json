@@ -1,0 +1,8 @@
+{
+  "name": "Cake.Mix.Sample",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/devdigital/Cake.Mix.git",
+  "author": "devdigital <devdigital.cloud@gmail.com>",
+  "license": "MIT"
+}
