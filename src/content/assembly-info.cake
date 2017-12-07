@@ -1,4 +1,5 @@
 #addin "Cake.FileHelpers"
+#load common.cake
 
 public class AssemblyInfoUpdaterBuilder
 {
@@ -46,7 +47,7 @@ public class AssemblyInfoUpdaterBuilder
   }
 }
 
-public class AssemblyInfoUpdater
+public class AssemblyInfoUpdater : ICommand
 {
   private ICakeContext context;
   
@@ -76,7 +77,7 @@ public class AssemblyInfoUpdater
     this.version = version;
   }
   
-  public void Run()
+  public void Execute()
   {
     this.context.ReplaceRegexInFiles(
       this.filesGlob, 

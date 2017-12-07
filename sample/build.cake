@@ -11,4 +11,4 @@ var assemblyInfoUpdater = new AssemblyInfoUpdaterBuilder(Context)
   .WithVersion(version)
   .Build();
   
-assemblyInfoUpdater.Run();
+assemblyInfoUpdater.Execute();
