@@ -6,7 +6,8 @@
   "author": "devdigital <devdigital.cloud@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "release": "standard-version"
+    "release": "standard-version",
+    "build": "echo build"
   },
   "dependencies": {
     "standard-version": "^4.2.0"
