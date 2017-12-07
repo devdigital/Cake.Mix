@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>Cake.Mix</id>
+        <version>$version$</version>
+        <authors>DevDigital</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Set of utility Cake build scripts.</description>        
+    </metadata>    
+</package>
