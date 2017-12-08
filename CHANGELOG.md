@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/devdigital/Cake.Mix/compare/v0.3.0...v0.4.0) (2017-12-08)
+
+
+### Features
+
+* add dot net core commands ([d2bf6d6](https://github.com/devdigital/Cake.Mix/commit/d2bf6d6))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/devdigital/Cake.Mix/compare/v0.2.0...v0.3.0) (2017-12-07)
 
