@@ -63,3 +63,47 @@ var yarnBuilder = new YarnBuilder(Context)
   .WithWorkingDirectory("./src")
   .WithYarnPath("./yarn-1.3.2.js");
 ```
+
+### .NET Core
+
+#### Restore
+
+```csharp
+var command = new DotNetCoreRestoreBuilder(Context)
+  .WithProjects(new List<string> { ".../MyProject.csproj" })
+  .Build();
+
+command.Execute();
+```
+
+#### Build
+
+```csharp
+var command = new DotNetCoreBuildBuilder(Context)
+  .WithSolutions("**/*.sln")
+  .WithParameter("DeployOnBuild", "true")
+  .WithParameter("AssemblyVersion", version)
+  ...
+  .Build();
+
+command.Execute();
+```
+
+#### Test
+
+```csharp
+var command = new DotNetCoreTestBuilder(Context)
+  .WithProjects("**/*UnitTests.csproj)
+  .WithArguments("--logger \"trx;LogFileName=TestResults.xml\"")
+  .Build();
+
+command.Execute();
+```
+
+For all of the .NET core commands, you can also specify the path to the .NET Core SDK with `WithDotNetCorePath`, e.g:
+
+```csharp
+var command = new DotNetCoreRestoreBuilder(Context)
+  .WithDotNetCorePath(dotNetCorePath)
+  ...
+```
