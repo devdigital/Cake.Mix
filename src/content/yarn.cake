@@ -117,7 +117,15 @@ public class YarnCommand : ICommand
 
   private void RunGlobalYarn(string arguments)
   {
-    this.context.Yarn().FromPath(this.workingDirectory).RunScript(this.arguments);
+    var yarn = this.context.Yarn().FromPath(this.workingDirectory);
+    
+    if (arguments == "install")
+    {
+      yarn.Install();
+      return;
+    }
+    
+    yarn.RunScript(this.arguments);
   }
 
   private void RunYarn(string arguments)
