@@ -1,3 +1,5 @@
+#load common.cake
+
 public class DotNetCoreTestBuilder
 {
   private ICakeContext context;
@@ -27,7 +29,18 @@ public class DotNetCoreTestBuilder
     return this;
   }
 
-  public DotNetCoreTestBuilder WithProjects(string glob)
+  public DotNetCoreTestBuilder WithConfiguration(string configuration)
+  {
+    if (string.IsNullOrWhiteSpace(configuration))
+    {
+      throw new ArgumentNullException(nameof(configuration));
+    }
+
+    this.configuration = configuration;
+    return this;
+  }
+
+  public DotNetCoreTestBuilder WithProjectGlob(string glob)
   {
     if (string.IsNullOrWhiteSpace(glob))
     {
@@ -38,14 +51,25 @@ public class DotNetCoreTestBuilder
     return this;
   }
 
-  public DotNetCoreTestBuilder WithConfiguration(string configuration)
+  public DotNetCoreTestBuilder WithProjectGlobs(IEnumerable<string> globs)
   {
-    if (string.IsNullOrWhiteSpace(configuration))
+    if (globs == null)
     {
-      throw new ArgumentNullException(nameof(configuration));
+      throw new ArgumentNullException(nameof(globs));
     }
 
-    this.configuration = configuration;
+    this.projects = globs.SelectMany(g => this.context.GetFiles(g).Select(p => p.ToString()));
+    return this;
+  }
+
+  public DotNetCoreTestBuilder WithProjects(string glob)
+  {
+    if (string.IsNullOrWhiteSpace(glob))
+    {
+      throw new ArgumentNullException(nameof(glob));
+    }
+
+    this.projects = this.context.GetFiles(glob).Select(p => p.ToString());
     return this;
   }
 

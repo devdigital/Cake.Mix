@@ -1,3 +1,5 @@
+#load common.cake
+
 public class DotNetCoreRestoreBuilder
 {
   private ICakeContext context;
@@ -19,6 +21,28 @@ public class DotNetCoreRestoreBuilder
   public DotNetCoreRestoreBuilder WithDotNetCorePath(string path)
   {
     this.dotNetCorePath = path;
+    return this;
+  }
+
+  public DotNetCoreRestoreBuilder WithProjectGlob(string glob)
+  {
+    if (string.IsNullOrWhiteSpace(glob))
+    {
+      throw new ArgumentNullException(nameof(glob));
+    }
+
+    this.projects = this.context.GetFiles(glob).Select(p => p.ToString());
+    return this;
+  }
+
+  public DotNetCoreRestoreBuilder WithProjectGlobs(IEnumerable<string> globs)
+  {
+    if (globs == null)
+    {
+      throw new ArgumentNullException(nameof(globs));
+    }
+
+    this.projects = globs.SelectMany(g => this.context.GetFiles(g).Select(p => p.ToString()));
     return this;
   }
 

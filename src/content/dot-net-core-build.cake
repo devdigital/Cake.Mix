@@ -1,3 +1,5 @@
+#load common.cake
+
 public class DotNetCoreBuildBuilder
 {
   private ICakeContext context;
@@ -39,7 +41,7 @@ public class DotNetCoreBuildBuilder
     return this;
   }
 
-  public DotNetCoreBuildBuilder WithSolutions(string glob)
+  public DotNetCoreBuildBuilder WithSolutionGlob(string glob)
   {
     if (string.IsNullOrWhiteSpace(glob))
     {
@@ -47,6 +49,28 @@ public class DotNetCoreBuildBuilder
     }
 
     this.solutions = this.context.GetFiles(glob).Select(s => s.ToString());
+    return this;
+  }
+
+  public DotNetCoreBuildBuilder WithSolutionGlobs(IEnumerable<string> globs)
+  {
+    if (globs == null)
+    {
+      throw new ArgumentNullException(nameof(globs));
+    }
+
+    this.solutions = globs.SelectMany(g => this.context.GetFiles(g).Select(p => p.ToString()));
+    return this;
+  }
+
+  public DotNetCoreBuildBuilder WithSolutions(IEnumerable<string> solutions)
+  {
+    if (solutions == null)
+    {
+      throw new ArgumentNullException(nameof(solutions));
+    }
+
+    this.solutions = solutions;
     return this;
   }
 
