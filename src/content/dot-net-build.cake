@@ -8,6 +8,8 @@ public class DotNetBuildBuilder
 
   private string configuration;
 
+  private MSBuildToolVersion toolVersion;
+
   public DotNetBuildBuilder(ICakeContext context)
   {
     if (context == null)
@@ -17,6 +19,7 @@ public class DotNetBuildBuilder
 
     this.context = context;
     this.configuration = "Release";
+    this.toolVersion = MSBuildToolVersion.VS2017;
   }
 
   public DotNetBuildBuilder WithConfiguration(string configuration)
@@ -27,6 +30,12 @@ public class DotNetBuildBuilder
     }
 
     this.configuration = configuration;
+    return this;
+  }
+
+  public DotNetBuildBuilder WithToolVersion(MSBuildToolVersion toolVersion)
+  {
+    this.toolVersion = toolVersion;
     return this;
   }
 
@@ -68,6 +77,7 @@ public class DotNetBuildBuilder
     return new DotNetBuildCommand(
       this.context,
       this.configuration,
+      this.toolVersion,
       this.solutions
     );
   }
@@ -79,9 +89,15 @@ public class DotNetBuildCommand : ICommand
 
   private string configuration;
 
+  private MSBuildToolVersion toolVersion;
+
   private IEnumerable<string> solutions;
 
-  public DotNetBuildCommand(ICakeContext context, string configuration, IEnumerable<string> solutions)
+  public DotNetBuildCommand(
+    ICakeContext context,
+    string configuration,
+    MSBuildToolVersion toolVersion,
+    IEnumerable<string> solutions)
   {
     if (context == null)
     {
@@ -95,6 +111,7 @@ public class DotNetBuildCommand : ICommand
 
     this.context = context;
     this.configuration = configuration;
+    this.toolVersion = toolVersion;
     this.solutions = solutions;
   }
 
@@ -109,7 +126,7 @@ public class DotNetBuildCommand : ICommand
     var settings = new MSBuildSettings
     {
       Verbosity = Verbosity.Minimal,
-      ToolVersion = MSBuildToolVersion.VS2015,
+      ToolVersion = this.toolVersion,
       Configuration = this.configuration
     };
 
