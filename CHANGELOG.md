@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/devdigital/Cake.Mix/compare/v0.6.0...v0.7.0) (2018-01-12)
+
+
+### Features
+
+* add target and parameter support to build ([8c4dbe7](https://github.com/devdigital/Cake.Mix/commit/8c4dbe7))
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/devdigital/Cake.Mix/compare/v0.5.0...v0.6.0) (2018-01-11)
 
