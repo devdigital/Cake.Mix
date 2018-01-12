@@ -8,6 +8,10 @@ public class DotNetBuildBuilder
 
   private string configuration;
 
+  private ICollection<string> targets;
+
+  private IDictionary<string, string[]> parameters;
+
   private MSBuildToolVersion toolVersion;
 
   public DotNetBuildBuilder(ICakeContext context)
@@ -20,6 +24,8 @@ public class DotNetBuildBuilder
     this.context = context;
     this.configuration = "Release";
     this.toolVersion = MSBuildToolVersion.VS2017;
+    this.targets = new List<string>();
+    this.parameters = new Dictionary<string, string[]>();
   }
 
   public DotNetBuildBuilder WithConfiguration(string configuration)
@@ -37,6 +43,43 @@ public class DotNetBuildBuilder
   {
     this.toolVersion = toolVersion;
     return this;
+  }
+
+  public DotNetBuildBuilder WithTarget(string value)
+  {
+    this.targets.Add(value);
+    return this;
+  }
+
+  public DotNetBuildBuilder WithParameter(string name, string[] value)
+  {
+    if (string.IsNullOrWhiteSpace(name))
+    {
+      throw new ArgumentNullException(nameof(name));
+    }
+
+    if (value == null)
+    {
+      throw new ArgumentNullException(nameof(value));
+    }
+
+    if (this.parameters.ContainsKey(name))
+    {
+      throw new ArgumentException($"Parameter with name '{name}' already added.");
+    }
+
+    this.parameters.Add(name, value);
+    return this;
+  }
+
+  public DotNetBuildBuilder WithParameter(string name, string value)
+  {
+    if (string.IsNullOrWhiteSpace(value))
+    {
+      throw new ArgumentNullException(nameof(value));
+    }
+
+    return this.WithParameter(name, new[] { value });
   }
 
   public DotNetBuildBuilder WithSolutionGlob(string glob)
@@ -78,6 +121,8 @@ public class DotNetBuildBuilder
       this.context,
       this.configuration,
       this.toolVersion,
+      this.targets,
+      this.parameters,
       this.solutions
     );
   }
@@ -91,12 +136,18 @@ public class DotNetBuildCommand : ICommand
 
   private MSBuildToolVersion toolVersion;
 
+  private IEnumerable<string> targets;
+
+  private IDictionary<string, string[]> parameters;
+
   private IEnumerable<string> solutions;
 
   public DotNetBuildCommand(
     ICakeContext context,
     string configuration,
     MSBuildToolVersion toolVersion,
+    IEnumerable<string> targets,
+    IDictionary<string, string[]> parameters,
     IEnumerable<string> solutions)
   {
     if (context == null)
@@ -109,9 +160,21 @@ public class DotNetBuildCommand : ICommand
       throw new ArgumentNullException(nameof(configuration));
     }
 
+    if (targets == null)
+    {
+      throw new ArgumentNullException(nameof(targets));
+    }
+
+    if (parameters == null)
+    {
+      throw new ArgumentNullException(nameof(parameters));
+    }
+
     this.context = context;
     this.configuration = configuration;
     this.toolVersion = toolVersion;
+    this.targets = targets;
+    this.parameters = parameters;
     this.solutions = solutions;
   }
 
@@ -129,6 +192,16 @@ public class DotNetBuildCommand : ICommand
       ToolVersion = this.toolVersion,
       Configuration = this.configuration
     };
+
+    foreach (var target in this.targets)
+    {
+      settings = settings.WithTarget(target);
+    }
+
+    foreach (var parameter in this.parameters)
+    {
+      settings = settings.WithProperty(parameter.Key, parameter.Value);
+    }
 
     foreach (var solution in this.solutions)
     {
