@@ -10,7 +10,11 @@ public class DotNetBuildBuilder
 
   private string configuration;
 
-  private ICollection<string> targets;
+  private string target;
+
+  private MSBuildPlatform buildPlatform;
+
+  private PlatformTarget? platformTarget;
 
   private IDictionary<string, string[]> parameters;
 
@@ -26,7 +30,8 @@ public class DotNetBuildBuilder
     this.context = context;
     this.configuration = "Release";
     this.toolVersion = MSBuildToolVersion.VS2017;
-    this.targets = new List<string>();
+    this.target = "Build";
+    this.buildPlatform = MSBuildPlatform.x86;
     this.parameters = new Dictionary<string, string[]>();
   }
 
@@ -47,9 +52,26 @@ public class DotNetBuildBuilder
     return this;
   }
 
-  public DotNetBuildBuilder WithTarget(string value)
+  public DotNetBuildBuilder WithTarget(string target)
   {
-    this.targets.Add(value);
+    if (string.IsNullOrWhiteSpace(target))
+    {
+      throw new ArgumentNullException(nameof(target));
+    }
+
+    this.target = target;
+    return this;
+  }
+
+  public DotNetBuildBuilder WithBuildPlatform(MSBuildPlatform buildPlatform)
+  {
+    this.buildPlatform = buildPlatform;
+    return this;
+  }
+
+  public DotNetBuildBuilder WithPlatformTarget(PlatformTarget platformTarget)
+  {
+    this.platformTarget = platformTarget;
     return this;
   }
 
@@ -156,7 +178,9 @@ public class DotNetBuildBuilder
       this.context,
       this.configuration,
       this.toolVersion,
-      this.targets,
+      this.target,
+      this.buildPlatform,
+      this.platformTarget,
       this.parameters,
       this.solutions,
       this.projects
@@ -172,7 +196,11 @@ public class DotNetBuildCommand : ICommand
 
   private MSBuildToolVersion toolVersion;
 
-  private IEnumerable<string> targets;
+  private string target;
+
+  private MSBuildPlatform buildPlatform;
+
+  private PlatformTarget? platformTarget;
 
   private IDictionary<string, string[]> parameters;
 
@@ -184,7 +212,9 @@ public class DotNetBuildCommand : ICommand
     ICakeContext context,
     string configuration,
     MSBuildToolVersion toolVersion,
-    IEnumerable<string> targets,
+    string target,
+    MSBuildPlatform buildPlatform,
+    PlatformTarget? platformTarget,
     IDictionary<string, string[]> parameters,
     IEnumerable<string> solutions,
     IEnumerable<string> projects)
@@ -199,9 +229,9 @@ public class DotNetBuildCommand : ICommand
       throw new ArgumentNullException(nameof(configuration));
     }
 
-    if (targets == null)
+    if (string.IsNullOrWhiteSpace(target))
     {
-      throw new ArgumentNullException(nameof(targets));
+      throw new ArgumentNullException(nameof(target));
     }
 
     if (parameters == null)
@@ -212,31 +242,31 @@ public class DotNetBuildCommand : ICommand
     this.context = context;
     this.configuration = configuration;
     this.toolVersion = toolVersion;
-    this.targets = targets;
+    this.target = target;
+    this.buildPlatform = buildPlatform;
+    this.platformTarget = platformTarget;
     this.parameters = parameters;
-    this.solutions = solutions;
-    this.projects = projects;
+    this.solutions = solutions ?? Enumerable.Empty<string>();
+    this.projects = projects ?? Enumerable.Empty<string>();
   }
 
   public void Execute()
   {
-    if (this.solutions == null)
-    {
-      return;
-    }
-
     // TODO: make configurable
     var settings = new MSBuildSettings
     {
       Verbosity = Verbosity.Minimal,
       ToolVersion = this.toolVersion,
-      Configuration = this.configuration
+      Configuration = this.configuration,
+      MSBuildPlatform = this.buildPlatform,
     };
 
-    foreach (var target in this.targets)
+    if (this.platformTarget.HasValue)
     {
-      settings = settings.WithTarget(target);
+      settings.PlatformTarget = this.platformTarget;
     }
+
+    settings = settings.WithTarget(this.target);
 
     foreach (var parameter in this.parameters)
     {
