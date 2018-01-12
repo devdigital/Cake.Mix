@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/devdigital/Cake.Mix/compare/v0.8.0...v0.9.0) (2018-01-12)
+
+
+### Features
+
+* add ms build platform and target config ([dd5ea0f](https://github.com/devdigital/Cake.Mix/commit/dd5ea0f))
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/devdigital/Cake.Mix/compare/v0.7.0...v0.8.0) (2018-01-12)
 
