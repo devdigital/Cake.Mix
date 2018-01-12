@@ -135,11 +135,11 @@ public class DotNetIncludeFilesCommand : ICommand
     var copyAllNode = System.Xml.Linq.XDocument.Parse(@"
       <PropertyGroup>
           <CopyAllFilesToSingleFolderForPackageDependsOn>
-              `$(CopyAllFilesToSingleFolderForPackageDependsOn);
+              $(CopyAllFilesToSingleFolderForPackageDependsOn);
               CustomCollectFiles;
           </CopyAllFilesToSingleFolderForPackageDependsOn>
           <CopyAllFilesToSingleFolderForMsdeployDependsOn>
-              `$(CopyAllFilesToSingleFolderForMsdeployDependsOn);
+              $(CopyAllFilesToSingleFolderForMsdeployDependsOn);
               CustomCollectFiles;
           </CopyAllFilesToSingleFolderForMsdeployDependsOn>
       </PropertyGroup>");
