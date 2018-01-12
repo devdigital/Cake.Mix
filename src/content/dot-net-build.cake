@@ -4,6 +4,8 @@ public class DotNetBuildBuilder
 {
   private ICakeContext context;
 
+  private IEnumerable<string> projects;
+
   private IEnumerable<string> solutions;
 
   private string configuration;
@@ -93,6 +95,17 @@ public class DotNetBuildBuilder
     return this;
   }
 
+  public DotNetBuildBuilder WithProjectGlob(string glob)
+  {
+    if (string.IsNullOrWhiteSpace(glob))
+    {
+      throw new ArgumentNullException(nameof(glob));
+    }
+
+    this.projects = this.context.GetFiles(glob).Select(s => s.ToString());
+    return this;
+  }
+
   public DotNetBuildBuilder WithSolutionGlobs(IEnumerable<string> globs)
   {
     if (globs == null)
@@ -101,6 +114,17 @@ public class DotNetBuildBuilder
     }
 
     this.solutions = globs.SelectMany(g => this.context.GetFiles(g).Select(p => p.ToString()));
+    return this;
+  }
+
+  public DotNetBuildBuilder WithProjectGlobs(IEnumerable<string> globs)
+  {
+    if (globs == null)
+    {
+      throw new ArgumentNullException(nameof(globs));
+    }
+
+    this.projects = globs.SelectMany(g => this.context.GetFiles(g).Select(p => p.ToString()));
     return this;
   }
 
@@ -115,6 +139,17 @@ public class DotNetBuildBuilder
     return this;
   }
 
+  public DotNetBuildBuilder WithProjects(IEnumerable<string> projects)
+  {
+    if (projects == null)
+    {
+      throw new ArgumentNullException(nameof(projects));
+    }
+
+    this.projects = projects;
+    return this;
+  }
+
   public DotNetBuildCommand Build()
   {
     return new DotNetBuildCommand(
@@ -123,7 +158,8 @@ public class DotNetBuildBuilder
       this.toolVersion,
       this.targets,
       this.parameters,
-      this.solutions
+      this.solutions,
+      this.projects
     );
   }
 }
@@ -142,13 +178,16 @@ public class DotNetBuildCommand : ICommand
 
   private IEnumerable<string> solutions;
 
+  private IEnumerable<string> projects;
+
   public DotNetBuildCommand(
     ICakeContext context,
     string configuration,
     MSBuildToolVersion toolVersion,
     IEnumerable<string> targets,
     IDictionary<string, string[]> parameters,
-    IEnumerable<string> solutions)
+    IEnumerable<string> solutions,
+    IEnumerable<string> projects)
   {
     if (context == null)
     {
@@ -176,6 +215,7 @@ public class DotNetBuildCommand : ICommand
     this.targets = targets;
     this.parameters = parameters;
     this.solutions = solutions;
+    this.projects = projects;
   }
 
   public void Execute()
@@ -206,6 +246,11 @@ public class DotNetBuildCommand : ICommand
     foreach (var solution in this.solutions)
     {
       this.context.MSBuild(solution, settings);
+    }
+
+    foreach (var project in this.projects)
+    {
+      this.context.MSBuild(project, settings);
     }
   }
 }

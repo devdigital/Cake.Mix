@@ -3,6 +3,7 @@
 #load ../src/content/dot-net-core-build.cake
 #load ../src/content/dot-net-core-restore.cake
 #load ../src/content/dot-net-core-test.cake
+#load ../src/content/dot-net-include-files.cake
 #load ../src/content/dot-net-restore.cake
 #load ../src/content/dot-net-test.cake
 #load ../src/content/package-json.cake
