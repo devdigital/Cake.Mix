@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.9.2"></a>
+## [0.9.2](https://github.com/devdigital/Cake.Mix/compare/v0.9.1...v0.9.2) (2018-01-15)
+
+
+### Bug Fixes
+
+* add tool path for msbuild and assembly info globs ([b6aad3d](https://github.com/devdigital/Cake.Mix/commit/b6aad3d))
+
+
+
 <a name="0.9.1"></a>
 ## [0.9.1](https://github.com/devdigital/Cake.Mix/compare/v0.9.0...v0.9.1) (2018-01-12)
 
