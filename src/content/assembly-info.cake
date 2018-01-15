@@ -4,89 +4,106 @@
 public class AssemblyInfoUpdaterBuilder
 {
   private ICakeContext context;
-  
-  private string filesGlob;
-  
+
+  private IEnumerable<string> fileGlobs;
+
   private string version;
-  
+
   public AssemblyInfoUpdaterBuilder(ICakeContext context)
   {
     if (context == null)
     {
-      throw new ArgumentNullException("context");
+      throw new ArgumentNullException(nameof(context));
     }
-    
+
     this.context = context;
   }
-  
-  public AssemblyInfoUpdaterBuilder WithFiles(string filesGlob)
+
+  public AssemblyInfoUpdaterBuilder WithFileGlob(string glob)
   {
-    if (string.IsNullOrWhiteSpace(filesGlob))
+    if (string.IsNullOrWhiteSpace(glob))
     {
-      throw new ArgumentNullException("filesGlob");
+      throw new ArgumentNullException(nameof(glob));
     }
-    
-    this.filesGlob = filesGlob;
+
+    this.fileGlobs = new List<string> { glob };
     return this;
   }
-  
+
+  public AssemblyInfoUpdaterBuilder WithFileGlobs(IEnumerable<string> globs)
+  {
+    if (globs == null)
+    {
+      throw new ArgumentNullException(nameof(globs));
+    }
+
+    this.fileGlobs = globs;
+    return this;
+  }
+
   public AssemblyInfoUpdaterBuilder WithVersion(string version)
   {
     if (string.IsNullOrWhiteSpace(version))
     {
       throw new ArgumentNullException("version");
     }
-    
+
     this.version = version;
     return this;
   }
-  
+
   public AssemblyInfoUpdater Build()
   {
-    return new AssemblyInfoUpdater(this.context, this.filesGlob, this.version);
+    return new AssemblyInfoUpdater(
+      this.context,
+      this.fileGlobs,
+      this.version);
   }
 }
 
 public class AssemblyInfoUpdater : ICommand
 {
   private ICakeContext context;
-  
-  private string filesGlob;
-  
+
+  private IEnumerable<string> fileGlobs;
+
   private string version;
-  
-  public AssemblyInfoUpdater(ICakeContext context, string filesGlob, string version)
+
+  public AssemblyInfoUpdater(ICakeContext context, IEnumerable<string> fileGlobs, string version)
   {
     if (context == null)
     {
       throw new ArgumentNullException("context");
     }
-    
-    if (string.IsNullOrWhiteSpace(filesGlob))
-    {
-      throw new ArgumentNullException("filesGlob");
-    }
-    
+
     if (string.IsNullOrWhiteSpace(version))
     {
       throw new ArgumentNullException("version");
     }
-    
+
     this.context = context;
-    this.filesGlob = filesGlob;
+    this.fileGlobs = fileGlobs;
     this.version = version;
   }
-  
+
   public void Execute()
   {
-    this.context.ReplaceRegexInFiles(
-      this.filesGlob, 
-      "(?<=AssemblyVersion\\(\")(.+?)(?=\"\\))", 
-      this.version);
-      
-    this.context.ReplaceRegexInFiles(
-      this.filesGlob,
-      "(?<=AssemblyFileVersion\\(\")(.+?)(?=\"\\))", 
-      this.version);
+    if (this.fileGlobs == null)
+    {
+      return;
+    }
+
+    foreach (var fileGlob in this.fileGlobs)
+    {
+      this.context.ReplaceRegexInFiles(
+        fileGlob,
+        "(?<=AssemblyVersion\\(\")(.+?)(?=\"\\))",
+        this.version);
+
+      this.context.ReplaceRegexInFiles(
+        fileGlob,
+        "(?<=AssemblyFileVersion\\(\")(.+?)(?=\"\\))",
+        this.version);
+    }
   }
 }

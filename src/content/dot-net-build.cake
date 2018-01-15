@@ -18,6 +18,8 @@ public class DotNetBuildBuilder
 
   private IDictionary<string, string[]> parameters;
 
+  private string toolPath;
+
   private MSBuildToolVersion toolVersion;
 
   public DotNetBuildBuilder(ICakeContext context)
@@ -29,6 +31,7 @@ public class DotNetBuildBuilder
 
     this.context = context;
     this.configuration = "Release";
+    this.toolPath = null;
     this.toolVersion = MSBuildToolVersion.VS2017;
     this.target = "Build";
     this.buildPlatform = MSBuildPlatform.x86;
@@ -43,6 +46,17 @@ public class DotNetBuildBuilder
     }
 
     this.configuration = configuration;
+    return this;
+  }
+
+  public DotNetBuildBuilder WithToolPath(string path)
+  {
+    if (string.IsNullOrWhiteSpace(path))
+    {
+      throw new ArgumentNullException(nameof(path));
+    }
+
+    this.toolPath = path;
     return this;
   }
 
@@ -177,6 +191,7 @@ public class DotNetBuildBuilder
     return new DotNetBuildCommand(
       this.context,
       this.configuration,
+      this.toolPath,
       this.toolVersion,
       this.target,
       this.buildPlatform,
@@ -193,6 +208,8 @@ public class DotNetBuildCommand : ICommand
   private ICakeContext context;
 
   private string configuration;
+
+  private string toolPath;
 
   private MSBuildToolVersion toolVersion;
 
@@ -211,6 +228,7 @@ public class DotNetBuildCommand : ICommand
   public DotNetBuildCommand(
     ICakeContext context,
     string configuration,
+    string toolPath,
     MSBuildToolVersion toolVersion,
     string target,
     MSBuildPlatform buildPlatform,
@@ -241,6 +259,7 @@ public class DotNetBuildCommand : ICommand
 
     this.context = context;
     this.configuration = configuration;
+    this.toolPath = toolPath;
     this.toolVersion = toolVersion;
     this.target = target;
     this.buildPlatform = buildPlatform;
@@ -260,6 +279,11 @@ public class DotNetBuildCommand : ICommand
       Configuration = this.configuration,
       MSBuildPlatform = this.buildPlatform,
     };
+
+    if (!string.IsNullOrWhiteSpace(this.toolPath))
+    {
+      settings.ToolPath = new FilePath(this.toolPath);
+    }
 
     if (this.platformTarget.HasValue)
     {

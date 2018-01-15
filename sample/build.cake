@@ -15,7 +15,7 @@ var version = packageJson.GetVersion();
 Information("Version = " + version);
 
 var assemblyInfoUpdater = new AssemblyInfoUpdaterBuilder(Context)
-  .WithFiles("**/AssemblyInfo.cs")
+  .WithFileGlob("**/AssemblyInfo.cs")
   .WithVersion(version)
   .Build();
 
