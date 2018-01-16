@@ -1,7 +1,7 @@
 #tool "nuget:?package=xunit.runner.console"
 #load common.cake
 
-public class DotNetTestBuilder
+public class XUnit2TestBuilder
 {
   private ICakeContext context;
 
@@ -9,7 +9,11 @@ public class DotNetTestBuilder
 
   private IEnumerable<string> projects;
 
-  public DotNetTestBuilder(ICakeContext context)
+  private bool xmlOutput;
+
+  private string xmlOutputFolder;
+
+  public XUnit2TestBuilder(ICakeContext context)
   {
     if (context == null)
     {
@@ -20,7 +24,7 @@ public class DotNetTestBuilder
     this.configuration = "Release";
   }
 
-  public DotNetTestBuilder WithConfiguration(string configuration)
+  public XUnit2TestBuilder WithConfiguration(string configuration)
   {
     if (string.IsNullOrWhiteSpace(configuration))
     {
@@ -31,7 +35,7 @@ public class DotNetTestBuilder
     return this;
   }
 
-  public DotNetTestBuilder WithProjectGlob(string glob)
+  public XUnit2TestBuilder WithProjectGlob(string glob)
   {
     if (string.IsNullOrWhiteSpace(glob))
     {
@@ -42,7 +46,7 @@ public class DotNetTestBuilder
     return this;
   }
 
-  public DotNetTestBuilder WithProjectGlobs(IEnumerable<string> globs)
+  public XUnit2TestBuilder WithProjectGlobs(IEnumerable<string> globs)
   {
     if (globs == null)
     {
@@ -53,7 +57,7 @@ public class DotNetTestBuilder
     return this;
   }
 
-  public DotNetTestBuilder WithProjects(IEnumerable<string> projects)
+  public XUnit2TestBuilder WithProjects(IEnumerable<string> projects)
   {
     if (projects == null)
     {
@@ -64,17 +68,36 @@ public class DotNetTestBuilder
     return this;
   }
 
-  public DotNetTestCommand Build()
+  public XUnit2TestBuilder WithXmlOutput()
   {
-    return new DotNetTestCommand(
+    this.xmlOutput = true;
+    return this;
+  }
+
+  public XUnit2TestBuilder WithXmlOutputFolder(string folder)
+  {
+    if (string.IsNullOrWhiteSpace(folder))
+    {
+      throw new ArgumentNullException(nameof(folder));
+    }
+
+    this.xmlOutputFolder = folder;
+    return this;
+  }
+
+  public XUnit2TestCommand Build()
+  {
+    return new XUnit2TestCommand(
       this.context,
       this.configuration,
-      this.projects
+      this.projects,
+      this.xmlOutput,
+      this.xmlOutputFolder
     );
   }
 }
 
-public class DotNetTestCommand : ICommand
+public class XUnit2TestCommand : ICommand
 {
   private ICakeContext context;
 
@@ -82,7 +105,16 @@ public class DotNetTestCommand : ICommand
 
   private IEnumerable<string> projects;
 
-  public DotNetTestCommand(ICakeContext context, string configuration, IEnumerable<string> projects)
+  private bool xmlOutput;
+
+  private string xmlOutputFolder;
+
+  public XUnit2TestCommand(
+    ICakeContext context,
+    string configuration,
+    IEnumerable<string> projects,
+    bool xmlOutput,
+    string xmlOutputFolder)
   {
     if (context == null)
     {
@@ -97,6 +129,8 @@ public class DotNetTestCommand : ICommand
     this.context = context;
     this.configuration = configuration;
     this.projects = projects;
+    this.xmlOutput = xmlOutput;
+    this.xmlOutputFolder = xmlOutputFolder;
   }
 
   public void Execute()
@@ -120,8 +154,14 @@ public class DotNetTestCommand : ICommand
     // TODO: make configurable
     var settings = new XUnit2Settings
     {
-      ToolPath = "./tools/xunit.runner.console/xunit.runner.console/tools/net452/xunit.console.exe"
+      ToolPath = "./tools/xunit.runner.console/xunit.runner.console/tools/net452/xunit.console.exe",
+      XmlReport = this.xmlOutput
     };
+
+    if (!string.IsNullOrWhiteSpace(this.xmlOutputFolder))
+    {
+      settings.OutputDirectory = this.xmlOutputFolder;
+    }
 
     this.context.XUnit2(assemblyPaths, settings);
   }

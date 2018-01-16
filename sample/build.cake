@@ -5,8 +5,8 @@
 #load ../src/content/dot-net-core-test.cake
 #load ../src/content/dot-net-include-files.cake
 #load ../src/content/dot-net-restore.cake
-#load ../src/content/dot-net-test.cake
 #load ../src/content/package-json.cake
+#load ../src/content/xunit2-test.cake
 #load ../src/content/yarn.cake
 
 var packageJson = new PackageJson(Context, "./package.json");
