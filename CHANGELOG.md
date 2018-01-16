@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/devdigital/Cake.Mix/compare/v0.9.2...v0.10.0) (2018-01-16)
+
+
+### Features
+
+* add xunit xml output ([5d04742](https://github.com/devdigital/Cake.Mix/commit/5d04742))
+
+
+
 <a name="0.9.2"></a>
 ## [0.9.2](https://github.com/devdigital/Cake.Mix/compare/v0.9.1...v0.9.2) (2018-01-15)
 
