@@ -162,7 +162,7 @@ command.Execute();
 
 ```csharp
 var command = new DotNetCoreBuildBuilder(Context)
-  .WithSolutionGlob("**/*.sln")
+  .WithSolutionGlob("./Source/**/*.sln")
   .WithParameter("DeployOnBuild", "true")
   .WithParameter("AssemblyVersion", version)
   ...
@@ -175,7 +175,7 @@ command.Execute();
 
 ```csharp
 var command = new DotNetCoreTestBuilder(Context)
-  .WithProjectGlob("**/*UnitTests.csproj)
+  .WithProjectGlob("./Source/**/*UnitTests.csproj")
   .WithArguments("--logger \"trx;LogFileName=testresults.trx\"")
   .Build();
 
