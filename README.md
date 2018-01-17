@@ -152,7 +152,7 @@ command.Execute();
 
 ```csharp
 var command = new DotNetCoreRestoreBuilder(Context)
-  .WithProjects(new List<string> { "./MyProject.csproj" })
+  .WithProjects(new[] { "./MyProject.csproj" })
   .Build();
 
 command.Execute();
@@ -162,7 +162,7 @@ command.Execute();
 
 ```csharp
 var command = new DotNetCoreBuildBuilder(Context)
-  .WithSolutions("**/*.sln")
+  .WithSolutionGlob("**/*.sln")
   .WithParameter("DeployOnBuild", "true")
   .WithParameter("AssemblyVersion", version)
   ...
@@ -175,7 +175,7 @@ command.Execute();
 
 ```csharp
 var command = new DotNetCoreTestBuilder(Context)
-  .WithProjects("**/*UnitTests.csproj)
+  .WithProjectGlob("**/*UnitTests.csproj)
   .WithArguments("--logger \"trx;LogFileName=testresults.trx\"")
   .Build();
 
