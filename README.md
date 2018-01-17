@@ -107,6 +107,8 @@ var command = new XUnit2TestBuilder(Context)
 command.Execute();
 ```
 
+> Note that if you receive an `Unknown test framework: could not find xunit.dll (v1) or xunit.execution.*.dll (v2) ...` error then ensure that your test projects have a reference to the `xunit.core` NuGet package and that `xunit.execution.desktop.dll` gets copied to your bin output folder.
+
 #### Test with XUnit 2, XML test result output, and XSLT transformation
 
 ```csharp
