@@ -175,6 +175,11 @@ public class DotNetBuildBuilder
     return this;
   }
 
+  public DotNetBuildBuilder WithSolution(string solution)
+  {
+    return this.WithSolutions(new[] { solution });
+  }
+
   public DotNetBuildBuilder WithProjects(IEnumerable<string> projects)
   {
     if (projects == null)
@@ -184,6 +189,11 @@ public class DotNetBuildBuilder
 
     this.projects = projects;
     return this;
+  }
+
+  public DotNetBuildBuilder WithProject(string project)
+  {
+    return this.WithProjects(new[] { project });
   }
 
   public DotNetBuildCommand Build()

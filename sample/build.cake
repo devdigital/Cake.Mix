@@ -26,3 +26,17 @@ var yarn = new YarnBuilder(Context)
   .Build();
 
 yarn.Execute();
+
+var dotNetBuildCommand = new DotNetBuildBuilder(Context)
+  .WithSolution("./src/Cake.Mix.Sample.sln")
+  .Build();
+
+dotNetBuildCommand.Execute();
+
+var xunit2TestCommand = new XUnit2TestBuilder(Context)
+  .WithProjectGlob("./src/**/*Tests.csproj")
+  .WithXmlOutput("testoutput")
+  .WithXsltTransform("./xunit-to-trx.xslt", "trx")
+  .Build();
+
+xunit2TestCommand.Execute();

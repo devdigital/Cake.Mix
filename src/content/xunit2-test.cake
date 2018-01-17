@@ -9,9 +9,11 @@ public class XUnit2TestBuilder
 
   private IEnumerable<string> projects;
 
-  private bool xmlOutput;
-
   private string xmlOutputFolder;
+
+  private string xsltFile;
+
+  private string xsltExtension;
 
   public XUnit2TestBuilder(ICakeContext context)
   {
@@ -68,13 +70,7 @@ public class XUnit2TestBuilder
     return this;
   }
 
-  public XUnit2TestBuilder WithXmlOutput()
-  {
-    this.xmlOutput = true;
-    return this;
-  }
-
-  public XUnit2TestBuilder WithXmlOutputFolder(string folder)
+  public XUnit2TestBuilder WithXmlOutput(string folder)
   {
     if (string.IsNullOrWhiteSpace(folder))
     {
@@ -85,14 +81,32 @@ public class XUnit2TestBuilder
     return this;
   }
 
+  public XUnit2TestBuilder WithXsltTransform(string xsltFile, string extension)
+  {
+    if (string.IsNullOrWhiteSpace(xsltFile))
+    {
+      throw new ArgumentNullException(nameof(xsltFile));
+    }
+
+    if (string.IsNullOrWhiteSpace(extension))
+    {
+      throw new ArgumentNullException(nameof(extension));
+    }
+
+    this.xsltFile = xsltFile;
+    this.xsltExtension = extension;
+    return this;
+  }
+
   public XUnit2TestCommand Build()
   {
     return new XUnit2TestCommand(
       this.context,
       this.configuration,
       this.projects,
-      this.xmlOutput,
-      this.xmlOutputFolder
+      this.xmlOutputFolder,
+      this.xsltFile,
+      this.xsltExtension
     );
   }
 }
@@ -105,16 +119,19 @@ public class XUnit2TestCommand : ICommand
 
   private IEnumerable<string> projects;
 
-  private bool xmlOutput;
-
   private string xmlOutputFolder;
+
+  private string xsltFile;
+
+  private string xsltExtension;
 
   public XUnit2TestCommand(
     ICakeContext context,
     string configuration,
     IEnumerable<string> projects,
-    bool xmlOutput,
-    string xmlOutputFolder)
+    string xmlOutputFolder,
+    string xsltFile,
+    string xsltExtension)
   {
     if (context == null)
     {
@@ -129,8 +146,9 @@ public class XUnit2TestCommand : ICommand
     this.context = context;
     this.configuration = configuration;
     this.projects = projects;
-    this.xmlOutput = xmlOutput;
     this.xmlOutputFolder = xmlOutputFolder;
+    this.xsltFile = xsltFile;
+    this.xsltExtension = xsltExtension;
   }
 
   public void Execute()
@@ -151,11 +169,13 @@ public class XUnit2TestCommand : ICommand
       return $"{assemblyFolder}/{assemblyFile}";
     });
 
+    var createXmlReport = !string.IsNullOrWhiteSpace(this.xmlOutputFolder);
+
     // TODO: make configurable
     var settings = new XUnit2Settings
     {
       ToolPath = "./tools/xunit.runner.console/xunit.runner.console/tools/net452/xunit.console.exe",
-      XmlReport = this.xmlOutput
+      XmlReport = createXmlReport
     };
 
     if (!string.IsNullOrWhiteSpace(this.xmlOutputFolder))
@@ -164,5 +184,26 @@ public class XUnit2TestCommand : ICommand
     }
 
     this.context.XUnit2(assemblyPaths, settings);
+
+    if (!createXmlReport)
+    {
+      return;
+    }
+
+    if (string.IsNullOrWhiteSpace(this.xsltFile))
+    {
+      return;
+    }
+
+    var testOutputFiles = this.context.GetFiles($"{this.xmlOutputFolder}/*.xml");
+
+    this.context.Information($"XML transforming {testOutputFiles.Count()} test output xml file(s) in folder '{this.xmlOutputFolder}' using XSLT file '{this.xsltFile}'.");
+    foreach (var testOutputFile in testOutputFiles)
+    {
+      this.context.XmlTransform(
+        new FilePath(this.xsltFile),
+        testOutputFile,
+        testOutputFile.ChangeExtension(this.xsltExtension));
+    }
   }
 }

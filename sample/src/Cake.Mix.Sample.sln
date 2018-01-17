@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Mix.Sample.Web", "Cake
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Mix.Sample.Domain", "Cake.Mix.Sample.Domain\Cake.Mix.Sample.Domain.csproj", "{CEEBEC2E-1454-40CF-AF58-70F084A6DD3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Mix.Sample.Domain.UnitTests", "Cake.Mix.Sample.Domain.UnitTests\Cake.Mix.Sample.Domain.UnitTests.csproj", "{297A9706-5ECF-4AFB-8CDF-2DC3C8C004DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CEEBEC2E-1454-40CF-AF58-70F084A6DD3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEEBEC2E-1454-40CF-AF58-70F084A6DD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEEBEC2E-1454-40CF-AF58-70F084A6DD3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{297A9706-5ECF-4AFB-8CDF-2DC3C8C004DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{297A9706-5ECF-4AFB-8CDF-2DC3C8C004DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{297A9706-5ECF-4AFB-8CDF-2DC3C8C004DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{297A9706-5ECF-4AFB-8CDF-2DC3C8C004DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
