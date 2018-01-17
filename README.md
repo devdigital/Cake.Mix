@@ -32,12 +32,12 @@ var version = packageJson.GetVersion();
 ### Yarn
 
 ```csharp
-var yarn = new YarnBuilder(Context)
+var command = new YarnBuilder(Context)
   .WithWorkingDirectory("./src")
   .WithArguments("install")
   .Build();
   
-yarn.Execute();
+command.Execute();
 ```
 
 You can execute any command with the `WithArguments` method, e.g. `build` or `test` etc.
