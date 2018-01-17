@@ -16,7 +16,7 @@ In fact, it's recommended that you specify the version of the package too, e.g:
 #load "nuget:?package=Cake.Mix&version=0.4.0"
 ```
 
-This ensures any breaking changes in future versions of the package do not break your build script. It also ensures that the local `tools` folder isn't using a cached version on the package on updates.
+This ensures any breaking changes in future versions of the package do not break your build script. It also ensures that the local `tools` folder isn't using a cached version of the package on updates.
 
 The latest version number of the package can be checked in the [Change Log](/CHANGELOG.md).
 
@@ -64,13 +64,93 @@ var yarnBuilder = new YarnBuilder(Context)
   .WithYarnPath("./yarn-1.3.2.js");
 ```
 
+### .NET 4.x
+
+#### Update AssemblyInfo Files
+
+```csharp
+var command = new AssemblyInfoUpdaterBuilder(Context)
+  .WithFileGlob("./Source/**/AssemblyInfo.cs")
+  .WithVersion("1.0.0.0")
+  .Build();
+
+command.Execute();
+```
+
+#### Restore
+
+```csharp
+var command = new DotNetRestoreBuilder(Context)
+  .WithSolutions(new[] { "./MySolution.sln" })
+  .Build();
+
+command.Execute();
+```
+
+#### Build
+
+```csharp
+var command = new DotNetBuildBuilder(Context)
+  .WithSolution("./MySolution.sln")
+  .Build();
+  
+command.Execute();
+```
+
+#### Test with XUnit 2
+
+```csharp
+var command = new XUnit2TestBuilder(Context)
+  .WithProjectGlob("./Source/**/*UnitTests.csproj")
+  .Build();
+  
+command.Execute();
+```
+
+#### Test with XUnit 2, XML test result output, and XSLT transformation
+
+```csharp
+var command = new XUnit2TestBuilder(Context)
+  .WithProjectGlob("./Source/**/*UnitTests.csproj")
+  .WithXmlOutput("testresults")
+  .WithXsltTransform("./xunit-to-trx.xslt", "trx")
+  .Build();
+  
+command.Execute();
+```
+
+#### Publish
+
+```csharp
+var command = new DotNetBuildBuilder(Context)
+  .WithSolution("./MySolution.sln")
+  .WithTarget("Build")
+  .WithParameter("DeployOnBuild", "true")
+  .WithParameter("AutoParameterizationWebConfigConnectionStrings", "false")
+  .Build();
+
+command.Execute();
+```
+
+#### Include Files in csproj for WebDeploy
+
+```csharp
+var command = new DotNetIncludeFilesBuilder(Context)
+  .WithProject("./MyProject.csproj")
+  .WithFilesGlob(@"Content\*")
+  .WithDestinationFolder("Content")
+  .Build();
+
+command.Execute();
+```
+
 ### .NET Core
 
 #### Restore
 
 ```csharp
 var command = new DotNetCoreRestoreBuilder(Context)
-  .WithProjects(new List<string> { ".../MyProject.csproj" })
+  .WithProjects(new List<string> { "./MyProject.csproj" })
   .Build();
 
 command.Execute();
@@ -94,7 +174,7 @@ command.Execute();
 ```csharp
 var command = new DotNetCoreTestBuilder(Context)
   .WithProjects("**/*UnitTests.csproj)
-  .WithArguments("--logger \"trx;LogFileName=TestResults.xml\"")
+  .WithArguments("--logger \"trx;LogFileName=testresults.trx\"")
   .Build();
 
 command.Execute();
