@@ -10,7 +10,7 @@ Adding the following gives you access to all Cake.Mix commands:
 #load "nuget:?package=Cake.Mix"
 ```
 
-In fact, it's recommended that you specify the version of the package too, e.g:
+However, it is **strongly recommended** that you specify the version of the package too, e.g:
 
 ```
 #load "nuget:?package=Cake.Mix&version=0.4.0"
