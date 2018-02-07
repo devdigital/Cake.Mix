@@ -69,7 +69,7 @@ public class DotNetCoreTestBuilder
       throw new ArgumentNullException(nameof(projects));
     }
 
-    this.projects = this.projects;
+    this.projects = projects;
     return this;
   }
 
