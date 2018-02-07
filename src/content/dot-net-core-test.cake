@@ -62,15 +62,25 @@ public class DotNetCoreTestBuilder
     return this;
   }
 
-  public DotNetCoreTestBuilder WithProjects(string glob)
+  public DotNetCoreTestBuilder WithProjects(IEnumerable<string> projects)
   {
-    if (string.IsNullOrWhiteSpace(glob))
+    if (projects == null)
     {
-      throw new ArgumentNullException(nameof(glob));
+      throw new ArgumentNullException(nameof(projects));
     }
 
-    this.projects = this.context.GetFiles(glob).Select(p => p.ToString());
+    this.projects = this.projects;
     return this;
+  }
+
+  public DotNetCoreTestBuilder WithProject(string project)
+  {
+    if (string.IsNullOrWhiteSpace(project))
+    {
+      throw new ArgumentNullException(nameof(project));
+    }
+
+    return this.WithProjects(new[] { project });
   }
 
   public DotNetCoreTestBuilder WithArguments(string arguments)

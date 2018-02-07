@@ -57,6 +57,16 @@ public class DotNetCoreRestoreBuilder
     return this;
   }
 
+  public DotNetCoreRestoreBuilder WithProject(string project)
+  {
+    if (string.IsNullOrWhiteSpace(project))
+    {
+      throw new ArgumentNullException(nameof(project));
+    }
+
+    return this.WithProjects(new[] { project });
+  }
+
   public DotNetCoreRestoreCommand Build()
   {
     return new DotNetCoreRestoreCommand(

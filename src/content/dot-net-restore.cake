@@ -49,6 +49,16 @@ public class DotNetRestoreBuilder
     return this;
   }
 
+  public DotNetRestoreBuilder WithSolution(string solution)
+  {
+    if (string.IsNullOrWhiteSpace(solution))
+    {
+      throw new ArgumentNullException(nameof(solution));
+    }
+
+    return this.WithSolutions(new[] { solution });
+  }
+
   public DotNetRestoreCommand Build()
   {
     return new DotNetRestoreCommand(

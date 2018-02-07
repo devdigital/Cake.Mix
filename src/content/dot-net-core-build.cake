@@ -74,6 +74,16 @@ public class DotNetCoreBuildBuilder
     return this;
   }
 
+  public DotNetCoreBuildBuilder WithSolution(string solution)
+  {
+    if (string.IsNullOrWhiteSpace(solution))
+    {
+      throw new ArgumentNullException(nameof(solution));
+    }
+
+    return this.WithSolutions(new[] { solution });
+  }
+
   public DotNetCoreBuildBuilder WithParameter(string name, string value)
   {
     if (string.IsNullOrWhiteSpace(name))
