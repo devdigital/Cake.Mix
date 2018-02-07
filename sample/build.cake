@@ -6,6 +6,7 @@
 #load ../src/content/dot-net-include-files.cake
 #load ../src/content/dot-net-restore.cake
 #load ../src/content/package-json.cake
+#load ../src/content/tfs-build-number.cake
 #load ../src/content/xunit2-test.cake
 #load ../src/content/yarn.cake
 
