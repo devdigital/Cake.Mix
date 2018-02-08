@@ -15,6 +15,8 @@ public class XUnit2TestBuilder
 
   private string xsltExtension;
 
+  private string toolPath;
+
   public XUnit2TestBuilder(ICakeContext context)
   {
     if (context == null)
@@ -24,6 +26,7 @@ public class XUnit2TestBuilder
 
     this.context = context;
     this.configuration = "Release";
+    this.toolPath = "./tools/xunit.runner.console/xunit.runner.console/tools/net452/xunit.console.exe";
   }
 
   public XUnit2TestBuilder WithConfiguration(string configuration)
@@ -70,6 +73,17 @@ public class XUnit2TestBuilder
     return this;
   }
 
+  public XUnit2TestBuilder WithToolPath(string toolPath)
+  {
+    if (string.IsNullOrWhiteSpace(toolPath))
+    {
+      throw new ArgumentNullException(nameof(toolPath));
+    }
+
+    this.toolPath = toolPath;
+    return this;
+  }
+
   public XUnit2TestBuilder WithXmlOutput(string folder)
   {
     if (string.IsNullOrWhiteSpace(folder))
@@ -106,7 +120,8 @@ public class XUnit2TestBuilder
       this.projects,
       this.xmlOutputFolder,
       this.xsltFile,
-      this.xsltExtension
+      this.xsltExtension,
+      this.toolPath
     );
   }
 }
@@ -125,13 +140,16 @@ public class XUnit2TestCommand : ICommand
 
   private string xsltExtension;
 
+  private string toolPath;
+
   public XUnit2TestCommand(
     ICakeContext context,
     string configuration,
     IEnumerable<string> projects,
     string xmlOutputFolder,
     string xsltFile,
-    string xsltExtension)
+    string xsltExtension,
+    string toolPath)
   {
     if (context == null)
     {
@@ -143,12 +161,18 @@ public class XUnit2TestCommand : ICommand
       throw new ArgumentNullException(nameof(configuration));
     }
 
+    if (string.IsNullOrWhiteSpace(toolPath))
+    {
+      throw new ArgumentNullException(nameof(toolPath));
+    }
+
     this.context = context;
     this.configuration = configuration;
     this.projects = projects;
     this.xmlOutputFolder = xmlOutputFolder;
     this.xsltFile = xsltFile;
     this.xsltExtension = xsltExtension;
+    this.toolPath = toolPath;
   }
 
   public void Execute()
@@ -174,7 +198,7 @@ public class XUnit2TestCommand : ICommand
     // TODO: make configurable
     var settings = new XUnit2Settings
     {
-      ToolPath = "./tools/xunit.runner.console/xunit.runner.console/tools/net452/xunit.console.exe",
+      ToolPath = this.toolPath,
       XmlReport = createXmlReport
     };
 
