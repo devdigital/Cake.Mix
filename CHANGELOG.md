@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/devdigital/Cake.Mix/compare/v0.12.1...v0.13.0) (2018-02-08)
+
+
+### Features
+
+* add toolpath support for xunit2 ([d23ffef](https://github.com/devdigital/Cake.Mix/commit/d23ffef))
+
+
+
 <a name="0.12.1"></a>
 ## [0.12.1](https://github.com/devdigital/Cake.Mix/compare/v0.12.0...v0.12.1) (2018-02-07)
 
