@@ -34,7 +34,7 @@ public class DotNetBuildBuilder
     this.toolPath = null;
     this.toolVersion = MSBuildToolVersion.VS2017;
     this.target = "Build";
-    this.buildPlatform = MSBuildPlatform.x86;
+    this.buildPlatform = MSBuildPlatform.Automatic;
     this.parameters = new Dictionary<string, string[]>();
   }
 
