@@ -189,3 +189,28 @@ var command = new DotNetCoreRestoreBuilder(Context)
   .WithDotNetCorePath(dotNetCorePath)
   ...
 ```
+
+### TFS
+
+#### Set Build Number
+
+```csharp
+var command = new TfsBuildNumberBuilder(Context)
+  .WithBuildNumber("1.0.0.1")
+  .Build();
+
+command.Execute();
+```
+
+#### Publish Artifacts
+
+```csharp
+var command = new TfsPublishArtifactBuilder(Context)
+  .WithContainerFolder("foo")
+  .WithArtifactName("foo")
+  .WithArtifactLocation(EnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY"))
+  .Build();
+  
+command.Execute();
+```
+   
