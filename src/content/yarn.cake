@@ -1,4 +1,4 @@
-#addin "Cake.Yarn"
+#addin nuget:?package=Cake.Yarn&version=0.3.7
 #load common.cake
 
 public class YarnBuilder

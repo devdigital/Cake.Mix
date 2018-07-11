@@ -1,4 +1,4 @@
-#addin "Cake.FileHelpers"
+#addin nuget:?package=Cake.FileHelpers&version=3.0.0
 #load common.cake
 
 public class AssemblyInfoUpdaterBuilder
