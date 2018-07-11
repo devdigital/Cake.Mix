@@ -1,4 +1,4 @@
-#addin "Cake.FileHelpers"
+#addin nuget:?package=Cake.FileHelpers&version=3.0.0
 #addin nuget:?package=Newtonsoft.Json&version=9.0.1
 
 public class PackageJson 

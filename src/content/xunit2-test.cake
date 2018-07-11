@@ -1,4 +1,4 @@
-#tool "nuget:?package=xunit.runner.console"
+#tool nuget:?package=xunit.runner.console&version=2.3.1
 #load common.cake
 
 public class XUnit2TestBuilder
