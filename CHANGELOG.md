@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.13.1"></a>
+## [0.13.1](https://github.com/devdigital/Cake.Mix/compare/v0.13.0...v0.13.1) (2018-07-11)
+
+
+### Bug Fixes
+
+* default to automatic build platform ([2a13d13](https://github.com/devdigital/Cake.Mix/commit/2a13d13))
+* tie versions of addins ([f2b830d](https://github.com/devdigital/Cake.Mix/commit/f2b830d))
+
+
+
 <a name="0.13.0"></a>
 # [0.13.0](https://github.com/devdigital/Cake.Mix/compare/v0.12.1...v0.13.0) (2018-02-08)
 
