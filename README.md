@@ -13,12 +13,31 @@ Adding the following gives you access to all Cake.Mix commands:
 However, it is **strongly recommended** that you specify the version of the package too, e.g:
 
 ```
-#load "nuget:?package=Cake.Mix&version=0.4.0"
+#load "nuget:?package=Cake.Mix&version=0.13.1"
 ```
 
 This ensures any breaking changes in future versions of the package do not break your build script. It also ensures that the local `tools` folder isn't using a cached version of the package on updates.
 
 The latest version number of the package can be checked in the [Change Log](/CHANGELOG.md).
+
+## Pin Cake version
+
+You may need to [pin the version of Cake](https://cakebuild.net/docs/tutorials/pinning-cake-version) to avoid warnings, for example to version 0.25. First modify `tools/packages.config`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<packages>
+    <package id="Cake" version="0.25.0" />
+</packages>
+```
+
+Next, update your `.gitignore` file to ensure the `tools/packages.config` file is committed to version control:
+
+```
+/tools/*
+!/tools/xunit.runner.console.2.3.1
+!/tools/packages.config
+```
 
 ## Commands
 
